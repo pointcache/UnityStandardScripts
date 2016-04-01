@@ -4,6 +4,8 @@ namespace USTD
 {
     public class RotationConstraint : USTDBase
     {
+        /* to keep the rotation on one axis at zero, remove the target transform and enable that axis*/
+
         public Vector3 targetRotation; // The current rotation to constraint to, can be set manually if the target Transform is null
         public Transform targetTransform; // Current target transform to constrain to, can be left null for use of provided Vector3
 
