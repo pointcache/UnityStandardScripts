@@ -4,6 +4,9 @@ using USTD;
 
 namespace USTD
 {
+    /// <summary>
+    /// Constraints axis of host object to position of target object.
+    /// </summary>
     public class PositionConstraint : USTDBase
     {
         public Vector3 targetPosition; // The current position to constraint to, can be set manually if the target Transform is null

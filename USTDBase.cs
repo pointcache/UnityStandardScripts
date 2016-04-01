@@ -2,6 +2,9 @@
 using System.Collections;
 namespace USTD
 {
+    /// <summary>
+    /// Inherit from this to work with custom USTDUpdater 
+    /// </summary>
     public class USTDBase : MonoBehaviour
     {
         USTDUpdater updater;

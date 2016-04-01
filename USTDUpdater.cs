@@ -4,6 +4,10 @@ using System.Collections.Generic;
 using USTD;
 namespace USTD
 {
+    /// <summary>
+    /// Substitutes unity update methods by receiving just one call for all components if components inherit from USTDBase
+    /// The idea is to avoid multiple constly update calls and limit to just one per GameObject.
+    /// </summary>
     [DisallowMultipleComponent]
     public class USTDUpdater : MonoBehaviour
     {
