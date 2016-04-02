@@ -1,5 +1,5 @@
 # UnityStandardScripts
-The toolset that is most often used in most situations.
+I got too annoyed to redo all the small things. So here, collection of all time favorite small things.
 
 Installation:
 
