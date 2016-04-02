@@ -5,3 +5,5 @@ Installation:
 
   * Clone it in your client of choice right into Assets folder.
   
+  For documentation please switch to wiki page.
+  
