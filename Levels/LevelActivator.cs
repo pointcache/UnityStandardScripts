@@ -5,6 +5,9 @@ using USTD;
 using UnityEngine.SceneManagement;
 namespace USTD.Levels
 {
+    /// <summary>
+    /// Special Component that handles level loading
+    /// </summary>
     public class LevelActivator : MonoBehaviour
     {
         [SerializeField]
@@ -18,7 +21,7 @@ namespace USTD.Levels
         /// For launching from EDITOR
         /// </summary>
         /// <param name="level"></param>
-        /// <param name="_prefs"></param>
+        /// <param name="_prefs">This is done to pass editor preferences from editor</param>
         /// <returns></returns>
         public static LevelActivator New(Level level, USTDEditorPrefs _prefs)
         {
@@ -26,10 +29,16 @@ namespace USTD.Levels
             LevelActivator activator = go.AddComponent<LevelActivator>();
             activator.level = level;
             activator.prefs = _prefs;
+            //indicate that we launched from the editor
             activator.editorMode = true;
             return activator;
         }
 
+        /// <summary>
+        /// Use this to load level in game. All necessary clean up operation prior to loading you have to manage yourself.
+        /// </summary>
+        /// <param name="level"></param>
+        /// <returns></returns>
         public static LevelActivator New(Level level)
         {
             GameObject go = new GameObject("Level Activator");
@@ -38,7 +47,7 @@ namespace USTD.Levels
             return activator;
         }
 
-        // Use this for initialization
+        // Not awake because we have to be sure that the scene were in is RUNNING
         void Start()
         {
             level.LoadLevel();
@@ -59,9 +68,7 @@ namespace USTD.Levels
                     if (level.LevelLoaded)
                     {
                         SceneManager.SetActiveScene(level.LevelActiveScene);
-                        prefs.SingleLevelLoadMode = true;
-                        //self destruct
-                        //Destroy(this.gameObject);
+                        prefs.EditorSceneLaunchMode = true;
                         yield break;
                     }
                 }

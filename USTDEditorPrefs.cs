@@ -29,10 +29,13 @@ namespace USTD
             }
         }
 
-        public bool SingleLevelLoadMode;
+        public bool EditorSceneLaunchMode;
 
+        /// <summary>
+        /// Scenes that were opened before we launched level from editor
+        /// </summary>
         [SerializeField]
-        public List<string> scenes;
+        public List<string> PreviousScenes; 
 
         [SerializeField]
         public List<SceneSetupWrapper> sceneSetup;
