@@ -6,6 +6,7 @@ using System.Collections.Generic;
 
 namespace USS
 {
+    [System.Serializable]
     public class USSEditorPrefs : ScriptableObject
     {
         //Sorft of singleton

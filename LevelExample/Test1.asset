@@ -8,16 +8,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e5e3d77d28a8a9243a5339e91f1e8bb8, type: 3}
+  m_Script: {fileID: 11500000, guid: 84f088be906e0284b9523db0955d544e, type: 3}
   m_Name: Test1
   m_EditorClassIdentifier: 
   levelType: 0
   Name: 
-  Description: Demo level
-  FolderPath: USS/LevelExample
+  Description: 
+  FolderPath: 
   LevelLoaded: 0
-  ActiveScene: {fileID: 102900000, guid: f20eaeb873f727544845929f00e34356, type: 3}
-  scenesInFolderPaths:
-  - USS/LevelExample/scene1.unity
-  - USS/LevelExample/scene2.unity
-  - USS/LevelExample/scene3.unity
+  ActiveScene: {fileID: 0}
+  scenesInFolderPaths: []

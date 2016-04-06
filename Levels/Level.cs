@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.IO;
+using System.Text;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -26,6 +27,7 @@ namespace USS.Levels
         /// <summary>
         /// Mandatory starts after Assets/
         /// </summary>
+        [HideInInspector]
         public string FolderPath;
 
         /// <summary>
@@ -55,6 +57,22 @@ namespace USS.Levels
         /// <returns></returns>
         public List<string> Cache()
         {
+            FolderPath = AssetDatabase.GetAssetPath(this.GetInstanceID());
+            string[] arr = FolderPath.Split('/');
+            arr[0] = "";
+            arr[arr.Length - 1] = "";
+            FolderPath = "";
+
+
+            for (int i = 0; i < arr.Length; i++)
+            {
+                if (i < arr.Length - 1)
+                    FolderPath += arr[i] + "/";
+                else
+                    FolderPath += arr[i];
+            }
+
+            Debug.Log(FolderPath);
             scenesInFolderPaths = new List<string>();
             var scenes = Directory.GetFiles(Application.dataPath + "/" + FolderPath);
             foreach (var s in scenes)
