@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: efe9d9352db37d04b8206914e445a4ec, type: 3}
+  m_Name: OnEdgeEditorPrefs
+  m_EditorClassIdentifier: 
+  SingleLevelLoadMode: 0
+  scenes:
+  - Assets/Levels/Test/test_level_1.unity
+  - Assets/Levels/Test/test_level_1.unity
+  sceneSetup:
+  - isActive: 1
+    isLoaded: 1
+    path: Assets/Levels/Test/test_level_1.unity
+  - isActive: 0
+    isLoaded: 1
+    path: Assets/Levels/Test/geometry.unity
