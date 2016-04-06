@@ -157,10 +157,10 @@ namespace USS.Levels
 
             //Trick to clear all currently opened scenes is to just make new one
             Scene n = EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
-            EditorSceneManager.CloseScene(n, true);
+            
 
             selectedLevel.LoadLevelEditor();
-
+            EditorSceneManager.CloseScene(n, true);
         }
 
         static void CollectLevelsInDatabase()
