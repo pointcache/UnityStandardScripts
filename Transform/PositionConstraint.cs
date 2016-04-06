@@ -1,13 +1,13 @@
 ﻿using UnityEngine;
 using System.Collections;
-using USTD;
+using USS;
 
-namespace USTD
+namespace USS
 {
     /// <summary>
     /// Constraints axis of host object to position of target object.
     /// </summary>
-    public class PositionConstraint : USTDBase
+    public class PositionConstraint : USSBase
     {
         public Vector3 targetPosition; // The current position to constraint to, can be set manually if the target Transform is null
         public Transform targetTransform; // Current target transform to constrain to, can be left null for use of provided Vector3

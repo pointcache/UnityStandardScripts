@@ -1,13 +1,13 @@
 ﻿using UnityEngine;
 using System.Collections;
-namespace USTD
+namespace USS
 {
     /// <summary>
-    /// Inherit from this to work with custom USTDUpdater 
+    /// Inherit from this to work with custom USSUpdater 
     /// </summary>
-    public class USTDBase : MonoBehaviour
+    public class USSBase : MonoBehaviour
     {
-        USTDUpdater updater;
+        USSUpdater updater;
         public virtual void OnEnable()
         {
             CheckUpdater();
@@ -23,13 +23,13 @@ namespace USTD
         {
             if (updater == null)
             {
-                if (!GetComponent<USTDUpdater>())
+                if (!GetComponent<USSUpdater>())
                 {
-                    updater = gameObject.AddComponent<USTDUpdater>();
+                    updater = gameObject.AddComponent<USSUpdater>();
                 }
                 else
                 {
-                    updater = GetComponent<USTDUpdater>();
+                    updater = GetComponent<USSUpdater>();
                 }
             }
         }

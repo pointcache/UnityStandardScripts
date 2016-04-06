@@ -1,17 +1,17 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using USTD;
-namespace USTD
+using USS;
+namespace USS
 {
     /// <summary>
-    /// Substitutes unity update methods by receiving just one call for all components if components inherit from USTDBase
+    /// Substitutes unity update methods by receiving just one call for all components if components inherit from USSBase
     /// The idea is to avoid multiple constly update calls and limit to just one per GameObject.
     /// </summary>
     [DisallowMultipleComponent]
-    public class USTDUpdater : MonoBehaviour
+    public class USSUpdater : MonoBehaviour
     {
-        List<USTDBase> toUpdate = new List<USTDBase>();
+        List<USSBase> toUpdate = new List<USSBase>();
 
         // Update is called once per frame
         void Update()
@@ -32,12 +32,12 @@ namespace USTD
             }
         }
 
-        public void Register(USTDBase toAdd)
+        public void Register(USSBase toAdd)
         {
             toUpdate.Add(toAdd);
         }
 
-        public void Unregister(USTDBase toAdd)
+        public void Unregister(USSBase toAdd)
         {
             toUpdate.Remove(toAdd);
 

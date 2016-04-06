@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine.SceneManagement;
 
-namespace USTD.Levels
+namespace USS.Levels
 {
     /// <summary>
     /// This class describes level object

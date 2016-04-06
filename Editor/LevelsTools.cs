@@ -7,7 +7,7 @@ using System;
 using UnityEditor.SceneManagement;
 using UnityEngine.SceneManagement;
 
-namespace USTD.Levels
+namespace USS.Levels
 {
     /// <summary>
     /// This is functionality siute for Levels 
@@ -16,13 +16,13 @@ namespace USTD.Levels
     public static class LevelsTools
     {
 
-        const string LevelSeachQuery = "t:USTD.Levels.Level"; //Used when collecting Level SctiptableObjects
+        const string LevelSeachQuery = "t:USS.Levels.Level"; //Used when collecting Level SctiptableObjects
         static List<Level> levels; //Used to rebuild editor build settings
         static Level selectedLevel; //level that was selected in editor
 
         public static void InitializeLevels()
         {
-            
+
             levels = new List<Level>();
             //get current build settings
             var currentBuildScenes = EditorBuildSettings.scenes.ToList();
@@ -68,7 +68,7 @@ namespace USTD.Levels
             EditorApplication.playmodeStateChanged += RestoreScenes;
         }
 
-        [MenuItem("USTD/InitializeLevels")]
+        [MenuItem("USS/InitializeLevels")]
         static void Init()
         {
             InitializeLevels();
@@ -79,7 +79,7 @@ namespace USTD.Levels
         /// Launches currently selected level from editor
         /// </summary>
         [MenuItem("Assets/LaunchLevel")]
-        [MenuItem("USTD/LaunchLevel(select level asset)")]
+        [MenuItem("USS/LaunchLevel(select level asset)")]
         static void LaunchLevel()
         {
             InitializeLevels();
@@ -105,42 +105,42 @@ namespace USTD.Levels
             EditorSceneManager.SaveOpenScenes();
 
             //we save our currently opened scenes setup in our Editor Prefs
-            USTDEditorPrefs.prefs.StoreSceneSetup(EditorSceneManager.GetSceneManagerSetup());
+            USSEditorPrefs.prefs.StoreSceneSetup(EditorSceneManager.GetSceneManagerSetup());
 
             int c = EditorSceneManager.loadedSceneCount;
 
             //clear the scenes we stored last time
-            USTDEditorPrefs.prefs.PreviousScenes.Clear();
+            USSEditorPrefs.prefs.PreviousScenes.Clear();
 
             //now store currently opened ones
             for (int i = 0; i < c; i++)
             {
                 Scene s = EditorSceneManager.GetSceneAt(0);
-                USTDEditorPrefs.prefs.PreviousScenes.Add(s.path);
+                USSEditorPrefs.prefs.PreviousScenes.Add(s.path);
             }
 
             //Trick to clear all currently opened scenes is to just make new one
             Scene n = EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
             //Make level activator and provide selevted level
-            LevelActivator.New(selectedLevel, USTDEditorPrefs.prefs);
+            LevelActivator.New(selectedLevel, USSEditorPrefs.prefs);
             //Start game
             EditorApplication.isPlaying = true;
         }
 
         static void CollectLevelsInDatabase()
         {
-                string[] GUID = AssetDatabase.FindAssets("t:LevelsDatabase");
-                string path = AssetDatabase.GUIDToAssetPath(GUID[0]);
-                LevelsDatabase db = (LevelsDatabase)AssetDatabase.LoadAssetAtPath(path, typeof(LevelsDatabase));
+            string[] GUID = AssetDatabase.FindAssets("t:USS.Levels.LevelsDatabase");
+            string path = AssetDatabase.GUIDToAssetPath(GUID[0]);
+            LevelsDatabase db = (LevelsDatabase)AssetDatabase.LoadAssetAtPath(path, typeof(LevelsDatabase));
 
-                GUID = AssetDatabase.FindAssets(LevelSeachQuery);
-                db.Levels.Clear();
-                for (int i = 0; i < GUID.Length; i++)
-                {
-                    path = AssetDatabase.GUIDToAssetPath(GUID[i]);
-                    Level LEV = (Level)AssetDatabase.LoadAssetAtPath(path, typeof(Level));
-                    db.Levels.Add(LEV);
-                }
+            GUID = AssetDatabase.FindAssets(LevelSeachQuery);
+            db.Levels.Clear();
+            for (int i = 0; i < GUID.Length; i++)
+            {
+                path = AssetDatabase.GUIDToAssetPath(GUID[i]);
+                Level LEV = (Level)AssetDatabase.LoadAssetAtPath(path, typeof(Level));
+                db.Levels.Add(LEV);
+            }
         }
 
         /// <summary>
@@ -153,21 +153,21 @@ namespace USTD.Levels
                 return;
             }
             //If we detect we launched level already
-            if (USTDEditorPrefs.prefs.EditorSceneLaunchMode)
+            if (USSEditorPrefs.prefs.EditorSceneLaunchMode)
             {
                 //clean all up
                 Scene n = EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
                 EditorSceneManager.CloseScene(n, true);
 
                 //reopen previously stored scenes
-                for (int i = 0; i < USTDEditorPrefs.prefs.PreviousScenes.Count; i++)
+                for (int i = 0; i < USSEditorPrefs.prefs.PreviousScenes.Count; i++)
                 {
-                    EditorSceneManager.OpenScene(USTDEditorPrefs.prefs.PreviousScenes[i], OpenSceneMode.Additive);
+                    EditorSceneManager.OpenScene(USSEditorPrefs.prefs.PreviousScenes[i], OpenSceneMode.Additive);
                 }
                 //reset flag 
-                USTDEditorPrefs.prefs.EditorSceneLaunchMode = false;
+                USSEditorPrefs.prefs.EditorSceneLaunchMode = false;
                 //restore the setup to what it was before.
-                EditorSceneManager.RestoreSceneManagerSetup(USTDEditorPrefs.prefs.RestoreSceneSetup());
+                EditorSceneManager.RestoreSceneManagerSetup(USSEditorPrefs.prefs.RestoreSceneSetup());
             }
         }
     }

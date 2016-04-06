@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
-namespace USTD
+namespace USS
 {
-    public class RotationConstraint : USTDBase
+    public class RotationConstraint : USSBase
     {
         /* to keep the rotation on one axis at zero, remove the target transform and enable that axis*/
 

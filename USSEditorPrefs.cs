@@ -4,26 +4,26 @@ using UnityEditor;
 using UnityEditor.SceneManagement;
 using System.Collections.Generic;
 
-namespace USTD
+namespace USS
 {
-    public class USTDEditorPrefs : ScriptableObject
+    public class USSEditorPrefs : ScriptableObject
     {
         //Sorft of singleton
-        private static USTDEditorPrefs _prefs;
-        public static USTDEditorPrefs prefs
+        private static USSEditorPrefs _prefs;
+        public static USSEditorPrefs prefs
         {
             get
             {
                 if (_prefs == null)
                 {
-                    string[] GUID = AssetDatabase.FindAssets("t:USTDEditorPrefs");
+                    string[] GUID = AssetDatabase.FindAssets("t:USSEditorPrefs");
                     if (GUID.Length > 1)
                     {
                         Debug.LogError("<color=red>MAJOR VIOLATION - YOU CANT HAVE MORE THAN 1 OnEdgeEditorPrefs!</color>");
                         return null;
                     }
                     string path = AssetDatabase.GUIDToAssetPath(GUID[0]);
-                    _prefs = (USTDEditorPrefs)AssetDatabase.LoadAssetAtPath(path, typeof(USTDEditorPrefs));
+                    _prefs = (USSEditorPrefs)AssetDatabase.LoadAssetAtPath(path, typeof(USSEditorPrefs));
                 }
                 return _prefs;
             }

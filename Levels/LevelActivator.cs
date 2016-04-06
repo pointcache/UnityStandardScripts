@@ -1,9 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
-using USTD.Levels;
-using USTD;
+using USS.Levels;
+using USS;
 using UnityEngine.SceneManagement;
-namespace USTD.Levels
+namespace USS.Levels
 {
     /// <summary>
     /// Special Component that handles level loading
@@ -13,7 +13,7 @@ namespace USTD.Levels
         [SerializeField]
         Level level;
         [SerializeField]
-        USTDEditorPrefs prefs;
+        USSEditorPrefs prefs;
         [SerializeField]
         bool editorMode;
 
@@ -23,7 +23,7 @@ namespace USTD.Levels
         /// <param name="level"></param>
         /// <param name="_prefs">This is done to pass editor preferences from editor</param>
         /// <returns></returns>
-        public static LevelActivator New(Level level, USTDEditorPrefs _prefs)
+        public static LevelActivator New(Level level, USSEditorPrefs _prefs)
         {
             GameObject go = new GameObject("Level Activator");
             LevelActivator activator = go.AddComponent<LevelActivator>();

@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-namespace USTD.Levels
+namespace USS.Levels
 {
     public class LevelsDatabase : ScriptableObject
     {

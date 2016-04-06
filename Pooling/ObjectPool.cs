@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 using System;
-using USTD.Pooling;
+using USS.Pooling;
 
 public static class ObjectPoolExtensions
 {
@@ -15,7 +15,7 @@ public static class ObjectPoolExtensions
     }
 }
 
-namespace USTD.Pooling
+namespace USS.Pooling
 {
     public class ObjectPool : MonoBehaviour
     {
