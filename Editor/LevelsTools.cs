@@ -78,7 +78,7 @@ namespace USS.Levels
         /// <summary>
         /// Launches currently selected level from editor
         /// </summary>
-        [MenuItem("Assets/LaunchLevel")]
+        [MenuItem("Assets/LaunchLevel (runtime)")]
         [MenuItem("USS/LaunchLevel(select level asset)")]
         static void LaunchLevel()
         {
@@ -125,6 +125,42 @@ namespace USS.Levels
             LevelActivator.New(selectedLevel, USSEditorPrefs.prefs);
             //Start game
             EditorApplication.isPlaying = true;
+        }
+
+        /// <summary>
+        /// Passively loads all scene from level into editor without changing EditorState
+        /// </summary>
+        [MenuItem("Assets/OpenLevel (editor)")]
+        static void LoadLevel()
+        {
+            InitializeLevels();
+            CollectLevelsInDatabase();
+            //get selection
+            var selected = Selection.activeObject;
+            if (selected == null)
+            {
+                Debug.Log("Select level first.");
+                return;
+
+            }
+            Type t = selected.GetType();
+
+            if (t != typeof(Level))
+            {
+                Debug.LogError("Select Level!");
+                return;
+            }
+
+            selectedLevel = (Level)selected;
+
+            EditorSceneManager.SaveOpenScenes();
+
+            //Trick to clear all currently opened scenes is to just make new one
+            Scene n = EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
+            EditorSceneManager.CloseScene(n, true);
+
+            selectedLevel.LoadLevelEditor();
+
         }
 
         static void CollectLevelsInDatabase()

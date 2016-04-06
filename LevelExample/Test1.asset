@@ -13,8 +13,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   levelType: 0
   Name: 
-  Description: 
-  FolderPath: 
+  Description: Demo level
+  FolderPath: USS/LevelExample
   LevelLoaded: 0
-  ActiveScene: {fileID: 0}
-  scenesInFolderPaths: []
+  ActiveScene: {fileID: 102900000, guid: f20eaeb873f727544845929f00e34356, type: 3}
+  scenesInFolderPaths:
+  - USS/LevelExample/scene1.unity
+  - USS/LevelExample/scene2.unity
+  - USS/LevelExample/scene3.unity

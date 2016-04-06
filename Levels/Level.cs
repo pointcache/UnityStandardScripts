@@ -5,6 +5,7 @@ using System.Collections.Generic;
 
 using UnityEditor;
 using UnityEngine.SceneManagement;
+using UnityEditor.SceneManagement;
 
 namespace USS.Levels
 {
@@ -93,6 +94,24 @@ namespace USS.Levels
                 }
             }
             LevelLoaded = true;
+        }
+
+        public void LoadLevelEditor()
+        {
+            int c = scenesInFolderPaths.Count;
+            for (int i = 0; i < c; i++)
+            {
+                string scene = scenesInFolderPaths[i];
+                EditorSceneManager.OpenScene(Application.dataPath + "/" + scene, OpenSceneMode.Additive);
+
+                string[] arr_name = scene.Split('/');
+                string name = arr_name[arr_name.Length - 1].Replace(".unity", "");
+
+                if (ActiveScene.name == name)
+                {
+                    EditorSceneManager.SetActiveScene(EditorSceneManager.GetSceneByPath("Assets/" + scene));
+                }
+            }
         }
     }
 }
