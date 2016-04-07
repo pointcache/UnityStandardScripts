@@ -3,7 +3,7 @@ I got too annoyed to redo all the small things. So here, collection of all time 
 
 Installation:
 
-  * Clone it in your client of choice right into Assets folder.
+DO NOT CLONE IT DIRECTLY INTO PROJECT. Copy the folder instead!
   
   For documentation please switch to wiki page.
   
