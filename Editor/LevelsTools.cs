@@ -131,16 +131,21 @@ namespace USS.Levels
                 cb(selectedLevel);
             }
                 
-            //Start game
-            EditorApplication.isPlaying = true;
+            
         }
 
+        /// <summary>
+        /// If the launch sequence is not injected this method is used.
+        /// </summary>
+        /// <param name="level"></param>
         static void LaunchDefault(Level level)
         {
             //Trick to clear all currently opened scenes is to just make new one
             Scene n = EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
             //Make level activator and provide selevted level
             LevelActivator.New(level, USSEditorPrefs.prefs);
+            //Start game
+            EditorApplication.isPlaying = true;
         }
 
         /// <summary>
