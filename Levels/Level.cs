@@ -25,7 +25,7 @@ namespace USS.Levels
         public string Name; //optional
         public string Description; //optional
         /// <summary>
-        /// Mandatory starts after Assets/
+        /// Is cached automatically in CACHE()
         /// </summary>
         [HideInInspector]
         public string FolderPath;
@@ -63,13 +63,12 @@ namespace USS.Levels
             arr[arr.Length - 1] = "";
             FolderPath = "";
 
-
-            for (int i = 0; i < arr.Length; i++)
+            for (int i = 1; i < arr.Length; i++)
             {
-                if (i < arr.Length - 1)
-                    FolderPath += arr[i] + "/";
-                else
+                if (i == arr.Length - 1)
                     FolderPath += arr[i];
+                else
+                    FolderPath += arr[i] + "/";
             }
 
             Debug.Log(FolderPath);
@@ -102,7 +101,7 @@ namespace USS.Levels
             {
                 string scene = scenesInFolderPaths[i];
                 SceneManager.LoadScene(scene.Replace(".unity", ""), LoadSceneMode.Additive);
-
+                
                 string[] arr_name = scene.Split('/');
                 string name = arr_name[arr_name.Length - 1].Replace(".unity", "");
 

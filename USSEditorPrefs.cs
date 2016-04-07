@@ -3,6 +3,9 @@ using System.Collections;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using System.Collections.Generic;
+using System;
+using USS.Levels;
+using UnityEngine.Events;
 
 namespace USS
 {
@@ -31,15 +34,34 @@ namespace USS
         }
 
         public bool EditorSceneLaunchMode;
-
+        
+        [SerializeField]
+        private UnityAction<Level> LevelLaunchOverrideCallback;
         /// <summary>
         /// Scenes that were opened before we launched level from editor
         /// </summary>
-        [SerializeField]
         public List<string> PreviousScenes; 
-
-        [SerializeField]
         public List<SceneSetupWrapper> sceneSetup;
+        public bool Override;
+        public UnityAction<Level> GetLevelLaunchOverrideCallback()
+        {
+            return LevelLaunchOverrideCallback;
+        }
+
+        /// <summary>
+        /// This acts as an interface to change the behavior of level launcher.
+        /// 
+        /// </summary>
+        /// <param name="callback"></param>
+        public void OverrideEditorLevelLoadEvent(UnityAction<Level> callback)
+        {
+            LevelLaunchOverrideCallback = callback;
+        }
+
+        public void RestoreEditorLevelLoadEvent()
+        {
+            LevelLaunchOverrideCallback = null;
+        }
 
         public void StoreSceneSetup(SceneSetup[] setup)
         {

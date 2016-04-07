@@ -6,6 +6,7 @@ using System.Linq;
 using System;
 using UnityEditor.SceneManagement;
 using UnityEngine.SceneManagement;
+using UnityEngine.Events;
 
 namespace USS.Levels
 {
@@ -19,6 +20,7 @@ namespace USS.Levels
         const string LevelSeachQuery = "t:USS.Levels.Level"; //Used when collecting Level SctiptableObjects
         static List<Level> levels; //Used to rebuild editor build settings
         static Level selectedLevel; //level that was selected in editor
+
 
         public static void InitializeLevels()
         {
@@ -119,12 +121,26 @@ namespace USS.Levels
                 USSEditorPrefs.prefs.PreviousScenes.Add(s.path);
             }
 
+            if (USSEditorPrefs.prefs.GetLevelLaunchOverrideCallback() == null)
+            {
+                LaunchDefault(selectedLevel);
+            }
+            else
+            {
+                UnityAction<Level> cb = USSEditorPrefs.prefs.GetLevelLaunchOverrideCallback();
+                cb(selectedLevel);
+            }
+                
+            //Start game
+            EditorApplication.isPlaying = true;
+        }
+
+        static void LaunchDefault(Level level)
+        {
             //Trick to clear all currently opened scenes is to just make new one
             Scene n = EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
             //Make level activator and provide selevted level
-            LevelActivator.New(selectedLevel, USSEditorPrefs.prefs);
-            //Start game
-            EditorApplication.isPlaying = true;
+            LevelActivator.New(level, USSEditorPrefs.prefs);
         }
 
         /// <summary>
