@@ -13,7 +13,7 @@ namespace USS.Levels
         {
             if (levels.ContainsKey(name))
             {
-                levels[name].LoadLevel();
+                LevelActivator.New(levels[name]);
             }
         }
 

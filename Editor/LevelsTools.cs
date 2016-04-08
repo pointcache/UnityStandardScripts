@@ -44,7 +44,7 @@ namespace USS.Levels
                 //get paths to all scenes
                 List<string> currentPaths = currentBuildScenes.Select(x => x.path).ToList();
                 //force level to Cache the scenes
-                List<string> scenes = L.Cache();
+                L.Cache();
                 //for each scene
                 for (int t = 0; t < L.scenesInFolderPaths.Count; t++)
                 {
@@ -141,11 +141,12 @@ namespace USS.Levels
         static void LaunchDefault(Level level)
         {
             //Trick to clear all currently opened scenes is to just make new one
-            Scene n = EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
+            EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single); 
             //Make level activator and provide selevted level
             LevelActivator.New(level, USSEditorPrefs.prefs);
             //Start game
             EditorApplication.isPlaying = true;
+            
         }
 
         /// <summary>

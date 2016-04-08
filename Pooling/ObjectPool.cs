@@ -22,10 +22,12 @@ namespace USS.Pooling
         private static ObjectPool _instance;
         public static ObjectPool instance
         {
-            get { if(_instance == null)
+            get
+            {
+                if (_instance == null)
                 {
                     _instance = FindObjectOfType<ObjectPool>();
-                    if(_instance == null)
+                    if (_instance == null)
                     {
                         GameObject go = new GameObject("ObjectPool");
                         _instance = go.AddComponent<ObjectPool>();
@@ -74,7 +76,7 @@ namespace USS.Pooling
                     Debug.LogError("Exists custom object pool without object, clean it up.");
                     continue;
                 }
-                
+
                 if (!pool.ContainsKey(customPools[i].prefab))
                 {
                     pool.Add(customPools[i].prefab, customPools[i]);
@@ -112,10 +114,10 @@ namespace USS.Pooling
             public int MaxObjectsWarning = 10;
             public string Keyword;
             public GameObject prefab;
-            
-            public int CountFree { get; private set; }
-            public int CountInUse { get; private set; }
-            public int CountTotal { get { return CountFree + CountInUse; }  }
+
+            public int CountFree;
+            public int CountInUse;
+            public int CountTotal { get { return CountFree + CountInUse; } }
             List<ObjectPoolID> free = new List<ObjectPoolID>();
             List<ObjectPoolID> inUse = new List<ObjectPoolID>();
 
@@ -123,14 +125,14 @@ namespace USS.Pooling
 
             public GameObject Request(Vector3 position, Quaternion rotation)
             {
-                
+
                 if (CountFree <= 0)
                 {
-                    temp = (GameObject) GameObject.Instantiate(prefab, position, rotation);
+                    temp = (GameObject)GameObject.Instantiate(prefab, position, rotation);
                     ObjectPoolID obj = temp.AddComponent<ObjectPoolID>();
                     inUse.Add(obj);
                     CountInUse = inUse.Count;
-                    
+
                     obj.pool = this;
                     obj.MyParentTransform = prefab.transform.parent;
                     obj.transform.SetParent(obj.MyParentTransform);
@@ -143,16 +145,22 @@ namespace USS.Pooling
                 else
                 {
                     ObjectPoolID obj = free[0];
-                    obj.gameObject.SetActive(true);
+
+
                     free.RemoveAt(0);
                     inUse.Add(obj);
                     obj.transform.SetParent(obj.MyParentTransform);
+
+                    obj.gameObject.transform.position = position;
+                    obj.gameObject.transform.rotation = rotation;
+                    obj.gameObject.SetActive(true);
+
                     CountFree = free.Count;
                     CountInUse = inUse.Count;
                     temp = obj.gameObject;
                     obj.SetFree(false);
                 }
-                
+
                 return temp;
             }
 
@@ -161,7 +169,7 @@ namespace USS.Pooling
                 inUse.Remove(obj);
                 CountInUse = inUse.Count;
                 free.Add(obj);
-                
+
                 CountFree = free.Count;
                 obj.transform.SetParent(instance.transform);
                 obj.gameObject.SetActive(false);
