@@ -3,10 +3,8 @@ using System.IO;
 using System.Text;
 using System.Collections;
 using System.Collections.Generic;
-
-using UnityEditor;
 using UnityEngine.SceneManagement;
-using UnityEditor.SceneManagement;
+using System;
 
 namespace USS.Levels
 {
@@ -33,7 +31,7 @@ namespace USS.Levels
         /// <summary>
         /// Indicates if level was fully loaded
         /// </summary>
-        [HideInInspector]
+        
         public bool LevelLoaded;
         /// <summary>
         /// Internal cached scene that will become active
@@ -44,51 +42,15 @@ namespace USS.Levels
         /// <summary>
         /// Public field to reference your desired scene that will become the active scene of the level
         /// </summary>
-        public Object ActiveScene;
+        public UnityEngine.Object ActiveScene;
 
         /// <summary>
         /// List of paths to the scenes in our folder
         /// </summary>
         public List<string> scenesInFolderPaths;
 
-        /// <summary>
-        /// Collect all necessary data
-        /// </summary>
-        /// <returns></returns>
-        public List<string> Cache()
-        {
-            FolderPath = AssetDatabase.GetAssetPath(this.GetInstanceID());
-            string[] arr = FolderPath.Split('/');
-            arr[0] = "";
-            arr[arr.Length - 1] = "";
-            FolderPath = "";
+        public  Action<Level> OnLevelLoaded;
 
-            for (int i = 1; i < arr.Length; i++)
-            {
-                if (i == arr.Length - 1)
-                    FolderPath += arr[i];
-                else
-                    FolderPath += arr[i] + "/";
-            }
-
-            Debug.Log(FolderPath);
-            scenesInFolderPaths = new List<string>();
-            var scenes = Directory.GetFiles(Application.dataPath + "/" + FolderPath);
-            foreach (var s in scenes)
-            {
-                if (s.Contains(".asset"))
-                {
-                    continue;
-                }
-                string d = s.Replace(Application.dataPath + "/", "");
-                if (d.Contains("meta"))
-                    continue;
-
-                d = d.Replace('\\', '/');
-                scenesInFolderPaths.Add(d);
-            }
-            return scenesInFolderPaths;
-        }
 
         /// <summary>
         /// This is what actually performs the level loading from within the game, it doesnt cover Activation of the active scene,
@@ -111,24 +73,9 @@ namespace USS.Levels
                 }
             }
             LevelLoaded = true;
+            
         }
 
-        public void LoadLevelEditor()
-        {
-            int c = scenesInFolderPaths.Count;
-            for (int i = 0; i < c; i++)
-            {
-                string scene = scenesInFolderPaths[i];
-                EditorSceneManager.OpenScene(Application.dataPath + "/" + scene, OpenSceneMode.Additive);
 
-                string[] arr_name = scene.Split('/');
-                string name = arr_name[arr_name.Length - 1].Replace(".unity", "");
-
-                if (ActiveScene.name == name)
-                {
-                    EditorSceneManager.SetActiveScene(EditorSceneManager.GetSceneByPath("Assets/" + scene));
-                }
-            }
-        }
     }
 }

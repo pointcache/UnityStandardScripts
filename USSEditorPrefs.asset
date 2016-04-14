@@ -8,14 +8,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9a920e64471eb9a4f98a4f372bbb4c95, type: 3}
+  m_Script: {fileID: 11500000, guid: 61dcf4d29b4f31d48b476f471abed0c1, type: 3}
   m_Name: USSEditorPrefs
   m_EditorClassIdentifier: 
-  EditorSceneLaunchMode: 0
-  PreviousScenes:
-  - Assets/USS/LevelExample/scene2.unity
-  sceneSetup:
-  - isActive: 1
-    isLoaded: 1
-    path: Assets/USS/LevelExample/scene2.unity
-  Override: 1
+  PreviousScenes: []
+  sceneSetup: []
+  Override: 0

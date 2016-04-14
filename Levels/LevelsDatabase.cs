@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System;
+
 namespace USS.Levels
 {
     public class LevelsDatabase : ScriptableObject
@@ -13,7 +15,18 @@ namespace USS.Levels
         {
             if (levels.ContainsKey(name))
             {
-                LevelActivator.New(levels[name]);
+                LevelActivator.New(levels[name], null);
+            }
+        }
+
+        public void LoadLevel(string name, Action<Level> callback)
+        {
+            if (levels.ContainsKey(name))
+            {
+                LevelActivator.New(levels[name], callback);
+            }else
+            {
+                Debug.Log("Level " + name + " was not located by database.");
             }
         }
 

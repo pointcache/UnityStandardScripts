@@ -3,6 +3,8 @@ using System.Collections;
 using USS.Levels;
 using USS;
 using UnityEngine.SceneManagement;
+using System;
+
 namespace USS.Levels
 {
     /// <summary>
@@ -13,7 +15,7 @@ namespace USS.Levels
         [SerializeField]
         Level level;
         [SerializeField]
-        USSEditorPrefs prefs;
+        USSEditorVars vars;
         [SerializeField]
         bool editorMode;
 
@@ -23,12 +25,12 @@ namespace USS.Levels
         /// <param name="level"></param>
         /// <param name="_prefs">This is done to pass editor preferences from editor</param>
         /// <returns></returns>
-        public static LevelActivator New(Level level, USSEditorPrefs _prefs)
+        public static LevelActivator NewEditor(Level level, USSEditorVars _vars, Action<Level> callback)
         {
             GameObject go = new GameObject("Level Activator");
             LevelActivator activator = go.AddComponent<LevelActivator>();
             activator.level = level;
-            activator.prefs = _prefs;
+            activator.vars = _vars;
             //indicate that we launched from the editor
             activator.editorMode = true;
             return activator;
@@ -39,11 +41,12 @@ namespace USS.Levels
         /// </summary>
         /// <param name="level"></param>
         /// <returns></returns>
-        public static LevelActivator New(Level level)
+        public static LevelActivator New(Level level, Action<Level> callback)
         {
             GameObject go = new GameObject("Level Activator");
             LevelActivator activator = go.AddComponent<LevelActivator>();
             activator.level = level;
+            level.OnLevelLoaded = callback;
             return activator;
         }
 
@@ -68,7 +71,9 @@ namespace USS.Levels
                     if (level.LevelLoaded)
                     {
                         SceneManager.SetActiveScene(level.LevelActiveScene);
-                        prefs.EditorSceneLaunchMode = true;
+                        vars.EditorSceneLaunchMode = true;
+                        if (level.OnLevelLoaded != null)
+                            level.OnLevelLoaded(level);
                         yield break;
                     }
                 }
@@ -88,6 +93,8 @@ namespace USS.Levels
                     if (level.LevelLoaded)
                     {
                         SceneManager.SetActiveScene(level.LevelActiveScene);
+                        if (level.OnLevelLoaded != null)
+                            level.OnLevelLoaded(level); 
                         //self destruct
                         Destroy(this.gameObject);
                         yield break;

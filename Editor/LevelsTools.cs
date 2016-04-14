@@ -7,6 +7,7 @@ using System;
 using UnityEditor.SceneManagement;
 using UnityEngine.SceneManagement;
 using UnityEngine.Events;
+using System.IO;
 
 namespace USS.Levels
 {
@@ -19,7 +20,7 @@ namespace USS.Levels
 
         const string LevelSeachQuery = "t:USS.Levels.Level"; //Used when collecting Level SctiptableObjects
         static List<Level> levels; //Used to rebuild editor build settings
-        static Level selectedLevel; //level that was selected in editor
+        public static Level selectedLevel; //level that was selected in editor
 
 
         public static void InitializeLevels()
@@ -44,18 +45,18 @@ namespace USS.Levels
                 //get paths to all scenes
                 List<string> currentPaths = currentBuildScenes.Select(x => x.path).ToList();
                 //force level to Cache the scenes
-                L.Cache();
+                CacheLevel(L);
                 //for each scene
                 for (int t = 0; t < L.scenesInFolderPaths.Count; t++)
                 {
                     //if scene is not registered in build settings, add it 
-                    if (!currentPaths.Contains("Assets/" + L.scenesInFolderPaths[i]))
+                    if (!currentPaths.Contains("Assets/" + L.scenesInFolderPaths[t]))
                     {
                         currentBuildScenes.Add(new EditorBuildSettingsScene("Assets/" + L.scenesInFolderPaths[t], true));
                     }
                 }
             }
-
+            
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
             //assign changed build settings back
@@ -82,28 +83,35 @@ namespace USS.Levels
         /// </summary>
         [MenuItem("Assets/LaunchLevel (runtime)")]
         [MenuItem("USS/LaunchLevel(select level asset)")]
-        static void LaunchLevel()
+        public static void LaunchSelectedLevel()
+        {
+            LaunchLevel(false);
+        }
+        
+        public static void LaunchLevel(bool ignoreSelection)
         {
             InitializeLevels();
             CollectLevelsInDatabase();
-            //get selection
-            var selected = Selection.activeObject;
-            if (selected == null)
+            if (!ignoreSelection)
             {
-                Debug.Log("Select level first.");
-                return;
+                //get selection
+                var selected = Selection.activeObject;
+                if (selected == null)
+                {
+                    Debug.Log("Select level first.");
+                    return;
 
+                }
+                Type t = selected.GetType();
+
+                if (t != typeof(Level))
+                {
+                    Debug.LogError("Select Level!");
+                    return;
+                }
+
+                selectedLevel = (Level)selected;
             }
-            Type t = selected.GetType();
-
-            if (t != typeof(Level))
-            {
-                Debug.LogError("Select Level!");
-                return;
-            }
-
-            selectedLevel = (Level)selected;
-
             EditorSceneManager.SaveOpenScenes();
 
             //we save our currently opened scenes setup in our Editor Prefs
@@ -134,6 +142,11 @@ namespace USS.Levels
             
         }
 
+        static void _FinalizeLaunch(Level level)
+        {
+
+        }
+
         /// <summary>
         /// If the launch sequence is not injected this method is used.
         /// </summary>
@@ -143,10 +156,9 @@ namespace USS.Levels
             //Trick to clear all currently opened scenes is to just make new one
             EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single); 
             //Make level activator and provide selevted level
-            LevelActivator.New(level, USSEditorPrefs.prefs);
+            LevelActivator.NewEditor(level, USSEditorPrefs.vars, null);
             //Start game
             EditorApplication.isPlaying = true;
-            
         }
 
         /// <summary>
@@ -181,7 +193,7 @@ namespace USS.Levels
             Scene n = EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
             
 
-            selectedLevel.LoadLevelEditor();
+            LoadLevelEditor(selectedLevel);
             EditorSceneManager.CloseScene(n, true);
         }
 
@@ -199,6 +211,10 @@ namespace USS.Levels
                 Level LEV = (Level)AssetDatabase.LoadAssetAtPath(path, typeof(Level));
                 db.Levels.Add(LEV);
             }
+
+            EditorUtility.SetDirty(db);
+            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
         }
 
         /// <summary>
@@ -211,22 +227,79 @@ namespace USS.Levels
                 return;
             }
             //If we detect we launched level already
-            if (USSEditorPrefs.prefs.EditorSceneLaunchMode)
+            if (USSEditorPrefs.vars.EditorSceneLaunchMode)
             {
                 //clean all up
                 Scene n = EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
-                EditorSceneManager.CloseScene(n, true);
+                
 
                 //reopen previously stored scenes
                 for (int i = 0; i < USSEditorPrefs.prefs.PreviousScenes.Count; i++)
                 {
                     EditorSceneManager.OpenScene(USSEditorPrefs.prefs.PreviousScenes[i], OpenSceneMode.Additive);
                 }
+                EditorSceneManager.CloseScene(n, true);
                 //reset flag 
-                USSEditorPrefs.prefs.EditorSceneLaunchMode = false;
+                USSEditorPrefs.vars.EditorSceneLaunchMode = false;
                 //restore the setup to what it was before.
                 EditorSceneManager.RestoreSceneManagerSetup(USSEditorPrefs.prefs.RestoreSceneSetup());
             }
+        }
+
+        public static void LoadLevelEditor(Level level)
+        {
+            int c = level.scenesInFolderPaths.Count;
+            for (int i = 0; i < c; i++)
+            {
+                string scene = level.scenesInFolderPaths[i];
+                EditorSceneManager.OpenScene(Application.dataPath + "/" + scene, OpenSceneMode.Additive);
+
+                string[] arr_name = scene.Split('/');
+                string name = arr_name[arr_name.Length - 1].Replace(".unity", "");
+
+                if (level.ActiveScene.name == name)
+                {
+                    EditorSceneManager.SetActiveScene(EditorSceneManager.GetSceneByPath("Assets/" + scene));
+                }
+            }
+        }
+
+        /// <summary>
+        /// Collect all necessary data
+        /// </summary>
+        /// <returns></returns>
+        public static void CacheLevel(Level level)
+        {
+            level.FolderPath = AssetDatabase.GetAssetPath(level.GetInstanceID());
+            string[] arr = level.FolderPath.Split('/');
+            arr[0] = "";
+            arr[arr.Length - 1] = "";
+            level.FolderPath = "";
+
+            for (int i = 1; i < arr.Length; i++)
+            {
+                if (i == arr.Length - 1)
+                    level.FolderPath += arr[i];
+                else
+                    level.FolderPath += arr[i] + "/";
+            }
+
+            level.scenesInFolderPaths = new List<string>();
+            var scenes = Directory.GetFiles(Application.dataPath + "/" + level.FolderPath);
+            foreach (var s in scenes)
+            {
+                if (s.Contains(".asset"))
+                {
+                    continue;
+                }
+                string d = s.Replace(Application.dataPath + "/", "");
+                if (d.Contains("meta"))
+                    continue;
+
+                d = d.Replace('\\', '/');
+                level.scenesInFolderPaths.Add(d);
+            }
+           
         }
     }
 }

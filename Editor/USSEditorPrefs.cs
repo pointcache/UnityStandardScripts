@@ -28,12 +28,33 @@ namespace USS
                     }
                     string path = AssetDatabase.GUIDToAssetPath(GUID[0]);
                     _prefs = (USSEditorPrefs)AssetDatabase.LoadAssetAtPath(path, typeof(USSEditorPrefs));
+
+
+                    
                 }
                 return _prefs;
             }
         }
 
-        public bool EditorSceneLaunchMode;
+        private static USSEditorVars _vars;
+        public static USSEditorVars vars
+        {
+            get
+            {
+                if (_vars == null)
+                {
+                    string[] GUID = AssetDatabase.FindAssets("t:USSEditorVars");
+                    if (GUID.Length > 1)
+                    {
+                        Debug.LogError("<color=red>MAJOR VIOLATION - YOU CANT HAVE MORE THAN 1 OnEdgeEditorVars!</color>");
+                        return null;
+                    }
+                    string path = AssetDatabase.GUIDToAssetPath(GUID[0]);
+                    _vars = (USSEditorVars)AssetDatabase.LoadAssetAtPath(path, typeof(USSEditorVars));
+                }
+                return _vars;
+            }
+        }
         
         [SerializeField]
         private UnityAction<Level> LevelLaunchOverrideCallback;

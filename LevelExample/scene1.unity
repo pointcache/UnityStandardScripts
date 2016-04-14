@@ -180,11 +180,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45d00782c6defde43810e0bdcd952916, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetPosition: {x: 0, y: 0, z: 0}
-  targetTransform: {fileID: 0}
-  X: 0
-  Y: 0
-  Z: 0
 --- !u!114 &432737597
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -196,11 +191,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c874c9786e4e66b42b8da0639aa46a56, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetRotation: {x: 0, y: 0, z: 0}
-  targetTransform: {fileID: 0}
-  X: 0
-  Y: 0
-  Z: 0
 --- !u!1 &1157548059
 GameObject:
   m_ObjectHideFlags: 0
@@ -213,6 +203,7 @@ GameObject:
   - 92: {fileID: 1157548062}
   - 124: {fileID: 1157548061}
   - 81: {fileID: 1157548060}
+  - 114: {fileID: 1157548065}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -288,6 +279,33 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1157548065
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1157548059}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 15be7ee8b2ed04e4b94a052461e21405, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  useFovLerp: 0
+  target: {fileID: 0}
+  targetOffset: {x: 0, y: 0, z: 0}
+  maxDistanceToTarget: 40
+  minDistanceToTarget: 2
+  yMinLimit: -80
+  yMaxLimit: 80
+  zoomRate: 1000
+  rotationDamp: 100
+  zoomMultiplier: 5
+  PanSpeedMin: 0.5
+  PanSpeedMax: 1
+  minFov: 0
+  maxFov: 0
+  xSpeed01: 0.2
+  ySpeed01: 0.2
 --- !u!1 &1301890931
 GameObject:
   m_ObjectHideFlags: 0
