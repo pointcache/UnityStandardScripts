@@ -116,7 +116,8 @@ namespace USS.Levels
 
             //we save our currently opened scenes setup in our Editor Prefs
             USSEditorPrefs.prefs.StoreSceneSetup(EditorSceneManager.GetSceneManagerSetup());
-
+            EditorUtility.SetDirty(USSEditorPrefs.prefs);
+            AssetDatabase.SaveAssets();
             int c = EditorSceneManager.loadedSceneCount;
 
             //clear the scenes we stored last time
@@ -140,11 +141,6 @@ namespace USS.Levels
             }
                 
             
-        }
-
-        static void _FinalizeLaunch(Level level)
-        {
-
         }
 
         /// <summary>

@@ -9,7 +9,6 @@ using UnityEngine.Events;
 
 namespace USS
 {
-    [System.Serializable]
     public class USSEditorPrefs : ScriptableObject
     {
         //Sorft of singleton
@@ -61,7 +60,8 @@ namespace USS
         /// <summary>
         /// Scenes that were opened before we launched level from editor
         /// </summary>
-        public List<string> PreviousScenes; 
+        public List<string> PreviousScenes;
+        [SerializeField]
         public List<SceneSetupWrapper> sceneSetup;
         public bool Override;
         public UnityAction<Level> GetLevelLaunchOverrideCallback()
@@ -86,6 +86,8 @@ namespace USS
 
         public void StoreSceneSetup(SceneSetup[] setup)
         {
+            if (sceneSetup == null)
+                sceneSetup = new List<SceneSetupWrapper>();
             sceneSetup.Clear();
 
             for (int i = 0; i < setup.Length; i++)
