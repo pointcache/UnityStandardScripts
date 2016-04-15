@@ -100,7 +100,6 @@ namespace USS.Levels
                 {
                     Debug.Log("Select level first.");
                     return;
-
                 }
                 Type t = selected.GetType();
 
@@ -140,8 +139,6 @@ namespace USS.Levels
                 UnityAction<Level> cb = USSEditorPrefs.prefs.GetLevelLaunchOverrideCallback();
                 cb(selectedLevel);
             }
-                
-            
         }
 
         /// <summary>
@@ -279,8 +276,17 @@ namespace USS.Levels
                 if (s.IndexOf('/') == 0)
                     s.Remove(0, 1);
                 level.scenesInFolderPaths.Add(s);
+
+                string[] arr_name = s.Split('/');
+                string name = arr_name[arr_name.Length - 1].Replace(".unity", "");
+
+                if (level.ActiveScene.name == name)
+                {
+                    level.LevelActiveScene = s;
+                }
             }
-           
+
+            EditorUtility.SetDirty(level);
         }
     }
 }

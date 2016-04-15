@@ -66,17 +66,15 @@ namespace USS.Levels
             while (true)
             {
                 //Wait 1 frame to activate the level ACTIVE scene
-                if (i == 1)
+                if (level.LevelLoaded)
                 {
-                    if (level.LevelLoaded)
-                    {
-                        SceneManager.SetActiveScene(level.LevelActiveScene);
-                        vars.EditorSceneLaunchMode = true;
-                        if (level.OnLevelLoaded != null)
-                            level.OnLevelLoaded(level);
-                        yield break;
-                    }
+                    SceneManager.SetActiveScene(SceneManager.GetSceneByPath(level.LevelActiveScene));
+                    vars.EditorSceneLaunchMode = true;
+                    if (level.OnLevelLoaded != null)
+                        level.OnLevelLoaded(level);
+                    yield break;
                 }
+
                 i++;
                 yield return null;
             }
@@ -87,18 +85,15 @@ namespace USS.Levels
             int i = 0;
             while (true)
             {
-                //Wait 1 frame to activate the level ACTIVE scene
-                if (i == 1)
+                //Wait to activate the level ACTIVE scene
+                if (i > 1 && level.LevelLoaded)
                 {
-                    if (level.LevelLoaded)
-                    {
-                        SceneManager.SetActiveScene(level.LevelActiveScene);
-                        if (level.OnLevelLoaded != null)
-                            level.OnLevelLoaded(level); 
-                        //self destruct
-                        Destroy(this.gameObject);
-                        yield break;
-                    }
+                    SceneManager.SetActiveScene(SceneManager.GetSceneByPath(level.LevelActiveScene));
+                    if (level.OnLevelLoaded != null)
+                        level.OnLevelLoaded(level);
+                    //self destruct
+                    Destroy(this.gameObject);
+                    yield break;
                 }
                 i++;
                 yield return null;

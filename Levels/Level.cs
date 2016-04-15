@@ -11,6 +11,7 @@ namespace USS.Levels
     /// <summary>
     /// This class describes level object
     /// </summary>
+    [System.Serializable]
     public class Level : ScriptableObject
     {
         //add your own customization, for example "utility level", "race track", "village/town"
@@ -37,7 +38,8 @@ namespace USS.Levels
         /// Internal cached scene that will become active
         /// </summary>
         [HideInInspector]
-        public Scene LevelActiveScene;
+        public string LevelActiveScene;
+        
 
         /// <summary>
         /// Public field to reference your desired scene that will become the active scene of the level
@@ -64,13 +66,7 @@ namespace USS.Levels
                 string scene = scenesInFolderPaths[i];
                 SceneManager.LoadScene(scene.Replace("Assets/", "").Replace(".unity", ""), LoadSceneMode.Additive);
                 
-                string[] arr_name = scene.Split('/');
-                string name = arr_name[arr_name.Length - 1].Replace(".unity", "");
-
-                if (ActiveScene.name == name)
-                {
-                    LevelActiveScene = SceneManager.GetSceneByPath(scene);
-                }
+                
             }
             LevelLoaded = true;
         }

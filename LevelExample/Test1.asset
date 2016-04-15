@@ -14,7 +14,11 @@ MonoBehaviour:
   levelType: 0
   Name: 
   Description: 
-  FolderPath: 
+  FolderPath: Assets/USS/LevelExample/
   LevelLoaded: 0
+  LevelActiveScene: Assets/USS/LevelExample/scene1.unity
   ActiveScene: {fileID: 102900000, guid: 3bf9dcf89eb802544b97e0c8a91a924f, type: 3}
-  scenesInFolderPaths: []
+  scenesInFolderPaths:
+  - Assets/USS/LevelExample/scene1.unity
+  - Assets/USS/LevelExample/scene2.unity
+  - Assets/USS/LevelExample/scene3.unity
