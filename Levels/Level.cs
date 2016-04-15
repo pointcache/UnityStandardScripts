@@ -62,20 +62,17 @@ namespace USS.Levels
             for (int i = 0; i < c; i++)
             {
                 string scene = scenesInFolderPaths[i];
-                SceneManager.LoadScene(scene.Replace(".unity", ""), LoadSceneMode.Additive);
+                SceneManager.LoadScene(scene.Replace("Assets/", "").Replace(".unity", ""), LoadSceneMode.Additive);
                 
                 string[] arr_name = scene.Split('/');
                 string name = arr_name[arr_name.Length - 1].Replace(".unity", "");
 
                 if (ActiveScene.name == name)
                 {
-                    LevelActiveScene = SceneManager.GetSceneByPath("Assets/" + scene);
+                    LevelActiveScene = SceneManager.GetSceneByPath(scene);
                 }
             }
             LevelLoaded = true;
-            
         }
-
-
     }
 }

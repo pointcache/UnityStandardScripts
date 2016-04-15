@@ -50,17 +50,17 @@ namespace USS.Levels
                 for (int t = 0; t < L.scenesInFolderPaths.Count; t++)
                 {
                     //if scene is not registered in build settings, add it 
-                    if (!currentPaths.Contains("Assets/" + L.scenesInFolderPaths[t]))
+                    if (!currentPaths.Contains(L.scenesInFolderPaths[t]))
                     {
-                        currentBuildScenes.Add(new EditorBuildSettingsScene("Assets/" + L.scenesInFolderPaths[t], true));
+                        currentBuildScenes.Add(new EditorBuildSettingsScene(L.scenesInFolderPaths[t], true));
                     }
                 }
             }
-            
-            AssetDatabase.SaveAssets();
-            AssetDatabase.Refresh();
-            //assign changed build settings back
             EditorBuildSettings.scenes = currentBuildScenes.ToArray();
+            AssetDatabase.SaveAssets();
+            //AssetDatabase.Refresh();
+            //assign changed build settings back
+            
         }
 
         /// <summary>
@@ -78,16 +78,16 @@ namespace USS.Levels
             CollectLevelsInDatabase();
         }
 
-        /// <summary>
-        /// Launches currently selected level from editor
-        /// </summary>
         [MenuItem("Assets/LaunchLevel (runtime)")]
         [MenuItem("USS/LaunchLevel(select level asset)")]
-        public static void LaunchSelectedLevel()
+        public static void LaunchLevel()
         {
             LaunchLevel(false);
         }
-        
+        /// <summary>
+        /// Launches currently selected level from editor
+        /// </summary>
+
         public static void LaunchLevel(bool ignoreSelection)
         {
             InitializeLevels();
@@ -116,8 +116,7 @@ namespace USS.Levels
 
             //we save our currently opened scenes setup in our Editor Prefs
             USSEditorPrefs.prefs.StoreSceneSetup(EditorSceneManager.GetSceneManagerSetup());
-            EditorUtility.SetDirty(USSEditorPrefs.prefs);
-            AssetDatabase.SaveAssets();
+
             int c = EditorSceneManager.loadedSceneCount;
 
             //clear the scenes we stored last time
@@ -129,6 +128,8 @@ namespace USS.Levels
                 Scene s = EditorSceneManager.GetSceneAt(0);
                 USSEditorPrefs.prefs.PreviousScenes.Add(s.path);
             }
+            EditorUtility.SetDirty(USSEditorPrefs.prefs);
+            AssetDatabase.SaveAssets();
 
             if (USSEditorPrefs.prefs.GetLevelLaunchOverrideCallback() == null)
             {
@@ -248,14 +249,14 @@ namespace USS.Levels
             for (int i = 0; i < c; i++)
             {
                 string scene = level.scenesInFolderPaths[i];
-                EditorSceneManager.OpenScene(Application.dataPath + "/" + scene, OpenSceneMode.Additive);
+                EditorSceneManager.OpenScene(scene, OpenSceneMode.Additive);
 
                 string[] arr_name = scene.Split('/');
                 string name = arr_name[arr_name.Length - 1].Replace(".unity", "");
 
                 if (level.ActiveScene.name == name)
                 {
-                    EditorSceneManager.SetActiveScene(EditorSceneManager.GetSceneByPath("Assets/" + scene));
+                    EditorSceneManager.SetActiveScene(EditorSceneManager.GetSceneByPath(scene));
                 }
             }
         }
@@ -267,33 +268,17 @@ namespace USS.Levels
         public static void CacheLevel(Level level)
         {
             level.FolderPath = AssetDatabase.GetAssetPath(level.GetInstanceID());
-            string[] arr = level.FolderPath.Split('/');
-            arr[0] = "";
-            arr[arr.Length - 1] = "";
-            level.FolderPath = "";
-
-            for (int i = 1; i < arr.Length; i++)
-            {
-                if (i == arr.Length - 1)
-                    level.FolderPath += arr[i];
-                else
-                    level.FolderPath += arr[i] + "/";
-            }
-
+            level.FolderPath = level.FolderPath.Remove(level.FolderPath.LastIndexOf('/')) + "/";
             level.scenesInFolderPaths = new List<string>();
-            var scenes = Directory.GetFiles(Application.dataPath + "/" + level.FolderPath);
+            var scenes = Directory.GetFiles(level.FolderPath);
             foreach (var s in scenes)
             {
-                if (s.Contains(".asset"))
-                {
-                    continue;
-                }
-                string d = s.Replace(Application.dataPath + "/", "");
-                if (d.Contains("meta"))
+                if (s.Contains(".asset") || s.Contains("meta"))
                     continue;
 
-                d = d.Replace('\\', '/');
-                level.scenesInFolderPaths.Add(d);
+                if (s.IndexOf('/') == 0)
+                    s.Remove(0, 1);
+                level.scenesInFolderPaths.Add(s);
             }
            
         }
